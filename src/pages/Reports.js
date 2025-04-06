@@ -19,14 +19,21 @@ function Reports() {
       const expenses = yearTransactions.filter((t) => t.type === 'Expense').reduce((sum, t) => sum + t.amount, 0);
 
       const savings = income - expenses;
-      const savingsRate = (savings / income) * 100;
+      
+      // Calculate savings rate - if income is 0, savings rate should be 0
+      const savingsRate = income === 0 ? 0 : (savings / income) * 100;
 
       return {
         year,
         income,
         expenses,
+        // Keep original savings value for calculations
         savings,
-        savingsRate: isNaN(savingsRate) ? 0 : savingsRate.toFixed(2),
+        // Display absolute value for UI
+        displaySavings: Math.abs(savings),
+        // Add indicator if savings is positive or negative
+        savingsStatus: savings >= 0 ? 'Saving' : 'Deficit',
+        savingsRate: savingsRate.toFixed(2),
       };
     });
   }, [transactions]);
@@ -66,6 +73,31 @@ function Reports() {
               </ResponsiveContainer>
             </Col>
           </Row>
+          
+          {/* Display savings information in a table */}
+          <div className="mt-4">
+            <h5>Savings Summary</h5>
+            <table className="table table-striped">
+              <thead>
+                <tr>
+                  <th>Year</th>
+                  <th>Status</th>
+                  <th>Amount</th>
+                  <th>Savings Rate</th>
+                </tr>
+              </thead>
+              <tbody>
+                {yearlyAnalysis.map((item) => (
+                  <tr key={item.year}>
+                    <td>{item.year}</td>
+                    <td>{item.savingsStatus}</td>
+                    <td>${item.displaySavings.toFixed(2)}</td>
+                    <td>{item.savingsRate}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </Card.Body>
       </Card>
 

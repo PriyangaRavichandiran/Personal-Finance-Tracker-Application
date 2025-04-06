@@ -11,10 +11,10 @@ const SET_BUDGET = 'SET_BUDGET';
 const initialState = {
   transactions: [],
   budgets: {
-    groceries: 500,
-    entertainment: 100,
-    rent: 1500,
-    utilities: 200
+    groceries: 0,
+    entertainment: 0,
+    rent: 0,
+    utilities: 0
   },
   totalIncome: 0,
   totalExpenses: 0
